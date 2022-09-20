@@ -20,7 +20,7 @@ export class User{
     @Column({nullable: false, default: false})
     activated: boolean
 
-    @ApiProperty({example: false,  type: String, description: 'user activation link'})
+    @ApiProperty({example: '6de42631-4812-435e-84c7-6012bc89fcce',  type: String, description: 'user activation link'})
     @Column({nullable: false, default: ''})
     activationLink: string
 }
