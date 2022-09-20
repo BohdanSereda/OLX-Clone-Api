@@ -10,6 +10,7 @@ async function bootstrap() {
   .setDescription('Rest API documentation')
   .setVersion('1.0.0')
   .addTag('OLX')
+  .addBearerAuth()
   .build()
   const document = SwaggerModule.createDocument(app, config)
   SwaggerModule.setup('/api/docs', app, document)
