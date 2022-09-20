@@ -1,17 +1,17 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { HttpException, HttpStatus, Inject, Injectable, Scope } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { User } from './entities/user.entity';
 import { UserDataBaseHelper } from './helpers/db.helper';
+import { v4 as uuidv4 } from 'uuid';
+import { REQUEST } from '@nestjs/core';
 
-@Injectable()
+@Injectable({ scope: Scope.REQUEST })
 export class UsersService {
   constructor(private readonly userDataBaseHelper: UserDataBaseHelper){}
 
   async createUser(createUserDto: CreateUserDto) {
-    const createdUser = await this.userDataBaseHelper.createUser(createUserDto)
+    const activationLink = uuidv4()
+    const createdUser = await this.userDataBaseHelper.createUser(createUserDto, activationLink)
+   
     if (!createdUser) {
       throw new HttpException({
         status: HttpStatus.CONFLICT,
@@ -23,6 +23,9 @@ export class UsersService {
 
    async findAllUsers() {
     const existingUsers = await this.userDataBaseHelper.findAllUsers()
+    
+
+    
     if(!existingUsers.length){
       throw new HttpException({
         status: HttpStatus.NOT_FOUND,
@@ -30,21 +33,5 @@ export class UsersService {
       }, HttpStatus.NOT_FOUND)
     }
     return existingUsers
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
-  }
-
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} user`;
-  }
-
-  async findUserByEmail(email: string){
-    const user = ''
   }
 }
