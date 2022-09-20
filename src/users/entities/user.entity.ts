@@ -19,4 +19,8 @@ export class User{
     @ApiProperty({example: false,  type: Boolean, description: 'user activation status'})
     @Column({nullable: false, default: false})
     activated: boolean
+
+    @ApiProperty({example: false,  type: String, description: 'user activation link'})
+    @Column({nullable: false, default: ''})
+    activationLink: string
 }
