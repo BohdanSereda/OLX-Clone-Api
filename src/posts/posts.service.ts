@@ -1,9 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
+import { REQUEST } from '@nestjs/core';
 import { CreatePostDto } from './dto/create-post.dto';
+import { IGetUserAuthInfoRequest } from './dto/custom-request.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 
 @Injectable()
 export class PostsService {
+  constructor(@Inject(REQUEST) private readonly request: IGetUserAuthInfoRequest,){}
   create(createPostDto: CreatePostDto) {
     return 'This action adds a new post';
   }
