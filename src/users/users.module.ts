@@ -3,7 +3,7 @@ import { UsersService } from './users.service';
 import { UsersController } from './users.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
-import { UserDataBaseHelper } from './helpers/db.helper';
+import { UserDataBaseService } from './helpers/db.helper';
 import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
@@ -12,7 +12,7 @@ import { AuthModule } from 'src/auth/auth.module';
     forwardRef(()=>AuthModule)
   ],
   controllers: [UsersController],
-  providers: [UsersService, UserDataBaseHelper],
-  exports: [UsersService, UserDataBaseHelper]
+  providers: [UsersService, UserDataBaseService],
+  exports: [UsersService, UserDataBaseService]
 })
 export class UsersModule {}

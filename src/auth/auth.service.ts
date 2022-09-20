@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
-import { UserDataBaseHelper } from 'src/users/helpers/db.helper';
+import { UserDataBaseService } from 'src/users/helpers/db.helper';
 import { UsersService } from 'src/users/users.service';
 import * as bcrypt from 'bcryptjs'
 import { User } from 'src/users/entities/user.entity';
@@ -11,7 +11,7 @@ import { MailService } from 'src/mail/mail.service';
 export class AuthService {
 
   constructor(private userService: UsersService,
-              private userDataBaseHelper: UserDataBaseHelper,
+              private userDataBaseService: UserDataBaseService,
               private mailService: MailService,
               private jwtService: JwtService){}
     
@@ -21,7 +21,7 @@ export class AuthService {
   }
 
   async registration(userDto: CreateUserDto){
-    const candidate = await this.userDataBaseHelper.findUserByEmail(userDto.email)
+    const candidate = await this.userDataBaseService.findUserByEmail(userDto.email)
     if(candidate){
       throw new HttpException({
         status: HttpStatus.CONFLICT,
@@ -36,7 +36,7 @@ export class AuthService {
   }
 
   async activation(activationLink: string){
-    const user = await this.userDataBaseHelper.findUserByActivationLink(activationLink)
+    const user = await this.userDataBaseService.findUserByActivationLink(activationLink)
     if(!user){
       throw new HttpException({
         status: HttpStatus.NOT_FOUND,
@@ -45,8 +45,8 @@ export class AuthService {
     }
     
     user.activated = true
-    await this.userDataBaseHelper.updateUser(user)
-    return "Email was confirmed"
+    await this.userDataBaseService.updateUser(user)
+    return "It's you! Your email address has been successfully verified."
   }
 
   private generateToken(user: User) {
@@ -56,7 +56,7 @@ export class AuthService {
   }
 
   private async validateUser(userDto: CreateUserDto){
-    const user = await this.userDataBaseHelper.findUserByEmail(userDto.email)
+    const user = await this.userDataBaseService.findUserByEmail(userDto.email)
     const passwordEquals = await bcrypt.compare(userDto.password, user.password)
     if(user && passwordEquals){
       return user
