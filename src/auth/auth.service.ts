@@ -5,12 +5,14 @@ import { UserDataBaseHelper } from 'src/users/helpers/db.helper';
 import { UsersService } from 'src/users/users.service';
 import * as bcrypt from 'bcryptjs'
 import { User } from 'src/users/entities/user.entity';
+import { MailService } from 'src/mail/mail.service';
 
 @Injectable()
 export class AuthService {
 
   constructor(private userService: UsersService,
               private userDataBaseHelper: UserDataBaseHelper,
+              private mailService: MailService,
               private jwtService: JwtService){}
     
   async login(userDto: CreateUserDto){
@@ -20,16 +22,31 @@ export class AuthService {
 
   async registration(userDto: CreateUserDto){
     const candidate = await this.userDataBaseHelper.findUserByEmail(userDto.email)
-    
     if(candidate){
       throw new HttpException({
         status: HttpStatus.CONFLICT,
         error: 'User with this email already exists'
       }, HttpStatus.CONFLICT)
     }
+
     const hashPassword = await bcrypt.hash(userDto.password, 5)
     const user = await this.userService.createUser({...userDto, password: hashPassword})
+    await this.mailService.sendActivationEmail(user)
     return this.generateToken(user)
+  }
+
+  async activation(activationLink: string){
+    const user = await this.userDataBaseHelper.findUserByActivationLink(activationLink)
+    if(!user){
+      throw new HttpException({
+        status: HttpStatus.NOT_FOUND,
+        error: 'User not found'
+      }, HttpStatus.NOT_FOUND)
+    }
+    
+    user.activated = true
+    await this.userDataBaseHelper.updateUser(user)
+    return "Email was confirmed"
   }
 
   private generateToken(user: User) {
