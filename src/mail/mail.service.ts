@@ -10,7 +10,7 @@ export class MailService {
     ) { }
     async sendActivationEmail(user: User): Promise<void> {
         console.log(user)
-        const text = `Hi user please confirm your email via link\n${process.env.API_URL}/auth/activate/${user.activationLink}`
+        const text = `Hi user please verify your email via link\n${process.env.API_URL}/auth/activate/${user.activationLink}`
         const from = 'scraper.api.study@gmail.com'
         const subject = "Confirmation"
         await this.sendEmail(from, subject, user.email, text)
