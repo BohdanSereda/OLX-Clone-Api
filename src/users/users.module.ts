@@ -3,8 +3,8 @@ import { UsersService } from './users.service';
 import { UsersController } from './users.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
-import { UserDataBaseService } from './helpers/db.helper';
 import { AuthModule } from 'src/auth/auth.module';
+import { UserDataBaseService } from './user.database.service';
 
 @Module({
   imports:[

@@ -1,8 +1,8 @@
-import { HttpException, HttpStatus, Inject, Injectable, Scope } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Scope } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UserDataBaseService } from './helpers/db.helper';
 import { v4 as uuidv4 } from 'uuid';
-import { REQUEST } from '@nestjs/core';
+import { UserDataBaseService } from './user.database.service';
+
 
 @Injectable({ scope: Scope.REQUEST })
 export class UsersService {

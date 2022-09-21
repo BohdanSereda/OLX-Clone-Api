@@ -1,7 +1,8 @@
 import { CanActivate, ExecutionContext, HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { User } from "src/users/entities/user.entity";
-import { UserDataBaseService } from "src/users/helpers/db.helper";
+import { UserDataBaseService } from "src/users/user.database.service";
+
 
 @Injectable()
 export class AccountActivationGuard implements CanActivate {
