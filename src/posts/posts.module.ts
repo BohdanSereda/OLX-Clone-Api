@@ -4,6 +4,7 @@ import { PostsController } from './posts.controller';
 import { AuthModule } from 'src/auth/auth.module';
 import { UsersModule } from 'src/users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { S3Service } from './S3.service';
 
 @Module({
   imports: [
@@ -12,6 +13,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     UsersModule
   ],
   controllers: [PostsController],
-  providers: [PostsService]
+  providers: [PostsService, S3Service]
 })
 export class PostsModule {}
