@@ -22,4 +22,19 @@ export class PostDataBaseService{
     async findPostsByUserId(userId){
         return await this.postRepository.findBy({user: userId})
     }
+
+    async updatePost(postUpdatesDto, postId, userId, images){
+        const post = await this.postRepository.findOneBy({id:+postId, user: userId})
+        if(!post){
+            return false
+        }
+        if (images) {
+            const s3Images = await this.s3Service.update(images, postId, post.images)
+            const imagesLinks = s3Images.map(image => image.Location)
+            const updatedPost = {...Object.assign(post, postUpdatesDto), images: imagesLinks}
+            return await this.postRepository.save({...updatedPost})
+        }
+        const updatedPost = Object.assign(post, postUpdatesDto)
+        return await this.postRepository.save({...updatedPost})
+    }
 }

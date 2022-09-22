@@ -3,7 +3,6 @@ import { REQUEST } from '@nestjs/core';
 import { CreatePostDto } from './dto/create-post.dto';
 import { IGetUserAuthInfoRequest } from './dto/custom-request.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
-import * as fsExtra from 'fs-extra'
 import { PostDataBaseService } from './posts.database.service';
 import { S3Service } from './S3.service';
 
@@ -19,7 +18,6 @@ export class PostsService {
   async create(images: Array<Express.Multer.File>, createPostDto: CreatePostDto) {
     const user = this.request.user    
     const post = await this.postDataBaseService.createPost(createPostDto, user, images)
-    fsExtra.emptyDir('images')
     return post
   }
 
@@ -32,8 +30,9 @@ export class PostsService {
     return `This action returns a #${id} post`;
   }
 
-  update(id: number, updatePostDto: UpdatePostDto) {
-    return `This action updates a #${id} post`;
+  async update(postId: number, updatePostDto: UpdatePostDto, images) {
+    const user = this.request.user  
+    return await this.postDataBaseService.updatePost(updatePostDto, postId, user.id, images)
   }
 
   remove(id: number) {

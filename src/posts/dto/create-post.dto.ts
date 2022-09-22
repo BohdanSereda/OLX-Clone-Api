@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger"
 import { Type } from "class-transformer"
-import { IsString, IsNotEmpty, IsIn, IsNumber, IsPhoneNumber } from "class-validator"
+import { IsString, IsNotEmpty, IsIn, IsNumber, IsPhoneNumber, IsNumberString } from "class-validator"
 import { CategoryType } from "./custom-types.dto"
 
 export class CreatePostDto {
@@ -18,9 +18,9 @@ export class CreatePostDto {
     @IsString()
     @ApiProperty({example: 'Very cool car',  type: String, description: 'good\'s description'})
     description: string
-
-    @Type(() => Number)
-    @IsNumber()
+    
+    @IsNotEmpty()
+    @IsNumberString()
     @ApiProperty({example: 28000,  type: Number, description: 'good\'s price'})
     price: number
 

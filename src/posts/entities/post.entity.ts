@@ -28,7 +28,7 @@ export class Post {
     description: string
 
     @ApiProperty({example: 28000,  type: Number, description: 'post price'})
-    @Column()
+    @Column({nullable: false, default: 0})
     price: number
 
     @Column()

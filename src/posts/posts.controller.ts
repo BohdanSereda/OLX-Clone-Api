@@ -41,9 +41,12 @@ export class PostsController {
 
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
+  @UseInterceptors(FilesInterceptor(...filesInterceptorConfig))
+  @ApiConsumes('multipart/form-data')
+  @ApiBody(apiBodySchema)
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
-    return this.postsService.update(+id, updatePostDto);
+  update(@UploadedFiles() images: Array<Express.Multer.File>, @Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
+    return this.postsService.update(+id, updatePostDto, images);
   }
 
   @ApiBearerAuth()
