@@ -29,7 +29,7 @@ export class S3Service {
     async update(images: Array<Express.Multer.File>, postId: number, postImages: string[]) {
         const imagesNames = images.map(images => `${postId}-${images.filename}`)
         const deleteImages = postImages.filter(image => !imagesNames.includes(image))
-        await Promise.all(deleteImages.map(async (image) => {
+        await Promise.all(deleteImages.map(async (image: string) => {
             const uploadParams = {
                 Bucket: process.env.AWS_BUCKET_NAME,
                 Key: image.split(this.amazonS3ObjectOrl).join('')
@@ -38,5 +38,15 @@ export class S3Service {
             return this.s3.deleteObject(uploadParams).promise()
         }))
         return await this.upload(images, postId)
+    }
+
+    async remove(images: string[]){        
+        await Promise.all(images.map(async (image: string) => {
+            const uploadParams = {
+                Bucket: process.env.AWS_BUCKET_NAME,
+                Key: image.split(this.amazonS3ObjectOrl).join('')
+            }
+            return this.s3.deleteObject(uploadParams).promise()
+        }))
     }
 }
