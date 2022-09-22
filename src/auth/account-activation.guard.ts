@@ -8,16 +8,22 @@ import { UserDataBaseService } from "src/users/user.database.service";
 @Injectable()
 export class AccountActivationGuard implements CanActivate {
     constructor(private userDataBaseService: UserDataBaseService,
-                private jwtService: JwtService){}
+        private jwtService: JwtService) { }
 
-    async canActivate(context: ExecutionContext): Promise<boolean>  {
+    async canActivate(context: ExecutionContext): Promise<boolean> {
         const request: IGetUserAuthInfoRequest = context.switchToHttp().getRequest()
         try {
-            const authHeader = request.headers.authorization
-            const token = authHeader.split(' ')[1]
-            const user =  this.jwtService.verify(token)
-            
-            if(!user.activated){
+
+            let user: User
+            if (request.body.email) {
+                user = await this.userDataBaseService.findUserByEmail(request.body.email)
+            } else {
+                const authHeader = request.headers.authorization
+                const token = authHeader.split(' ')[1]
+                user = this.jwtService.verify(token)
+            }
+
+            if (!user.activated) {
                 throw new HttpException({
                     status: HttpStatus.FORBIDDEN,
                     error: 'account is not activated'
