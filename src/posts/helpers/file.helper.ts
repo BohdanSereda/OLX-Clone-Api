@@ -17,8 +17,7 @@ export const filesInterceptorConfig: [string, number, MulterOptions] =['images',
     storage: diskStorage({
       destination: './images',
       filename: (req, file, cb) =>{
-        const fileExtension: string = path.extname(file.originalname);
-        const fileName: string = uuidv4() + fileExtension
+        const fileName: string = file.originalname
         cb(null, fileName)
       }
     })
