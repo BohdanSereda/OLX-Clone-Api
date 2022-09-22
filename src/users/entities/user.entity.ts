@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Post } from 'src/posts/entities/post.entity';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
 @Entity()
 export class User{
@@ -23,4 +24,7 @@ export class User{
     @ApiProperty({example: '6de42631-4812-435e-84c7-6012bc89fcce',  type: String, description: 'user activation link'})
     @Column({nullable: false, default: ''})
     activationLink: string
+
+    @OneToMany(()=> Post, post => post.user)
+    posts: Post[]
 }

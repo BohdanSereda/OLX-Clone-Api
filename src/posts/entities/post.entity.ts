@@ -1,5 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { User } from "src/users/entities/user.entity";
+import { Column, Entity, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { CategoryType } from "../dto/custom-types.dto";
 
 @Entity()
 export class Post {
@@ -12,9 +14,9 @@ export class Post {
     name: string
 
     
-    @ApiProperty({example: '......',  type: String, description: 'post images'})
+    @ApiProperty({example: '......',  type: "CategoryType", description: 'post images'})
     @Column()
-    category: string
+    category: CategoryType
 
     @ApiProperty({example: '......',  type: [String], description: 'post images'})
     @Column("simple-array", {nullable: true})
@@ -37,4 +39,10 @@ export class Post {
 
     @Column()
     phone: string
+
+    @Column({nullable: false, default: true})
+    active: boolean
+
+    @ManyToOne(()=> User, user => user.posts, {onDelete: 'SET NULL'})
+    user: User
 }
