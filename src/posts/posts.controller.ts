@@ -22,8 +22,6 @@ export class PostsController {
   @ApiConsumes('multipart/form-data')
   @ApiBody(apiBodySchema)
   create(@UploadedFiles() images: Array<Express.Multer.File>, @Body() createPostDto: CreatePostDto) {
-    console.log(images);
-    
     return this.postsService.create(images, createPostDto);    
   }
 
