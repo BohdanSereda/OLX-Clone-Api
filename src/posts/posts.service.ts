@@ -3,7 +3,8 @@ import { REQUEST } from '@nestjs/core';
 import { CreatePostDto } from './dto/create-post.dto';
 import { IGetUserAuthInfoRequest } from './dto/custom-request.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
-import { unlinkFile } from './helpers/file.helper';
+import * as fsExtra from 'fs-extra'
+import { PostDataBaseService } from './posts.database.service';
 import { S3Service } from './S3.service';
 
 
@@ -11,22 +12,20 @@ import { S3Service } from './S3.service';
 @Injectable()
 export class PostsService {
   constructor(@Inject(REQUEST) private readonly request: IGetUserAuthInfoRequest,
-              private readonly s3Service: S3Service){}
+              private readonly s3Service: S3Service,
+              private readonly postDataBaseService: PostDataBaseService){}
 
   
   async create(images: Array<Express.Multer.File>, createPostDto: CreatePostDto) {
-    const user = this.request.user
-    console.log(user);
-    
-    const result = await this.s3Service.upload(images)
-    console.log(result);
-    for (const image of images) {      
-      await unlinkFile(image.path)
-    }    
+    const user = this.request.user    
+    const post = await this.postDataBaseService.createPost(createPostDto, user, images)
+    fsExtra.emptyDir('images')
+    return post
   }
 
-  findAll() {
-    return `This action returns all posts`;
+  async findAll() {
+    const user = this.request.user  
+    return await this.postDataBaseService.findPostsByUserId(user.id)
   }
 
   findOne(id: number) {
