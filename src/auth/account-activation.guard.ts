@@ -1,17 +1,22 @@
 import { CanActivate, ExecutionContext, HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
+import { IGetUserAuthInfoRequest } from "src/posts/dto/custom-request.dto";
 import { User } from "src/users/entities/user.entity";
 import { UserDataBaseService } from "src/users/user.database.service";
 
 
 @Injectable()
 export class AccountActivationGuard implements CanActivate {
-    constructor(private userDataBaseService: UserDataBaseService,){}
+    constructor(private userDataBaseService: UserDataBaseService,
+                private jwtService: JwtService){}
 
     async canActivate(context: ExecutionContext): Promise<boolean>  {
-        const request = context.switchToHttp().getRequest()
+        const request: IGetUserAuthInfoRequest = context.switchToHttp().getRequest()
         try {
-            const user: User = await this.userDataBaseService.findUserByEmail(request.body.email)
+            const authHeader = request.headers.authorization
+            const token = authHeader.split(' ')[1]
+            const user =  this.jwtService.verify(token)
+            
             if(!user.activated){
                 throw new HttpException({
                     status: HttpStatus.FORBIDDEN,
