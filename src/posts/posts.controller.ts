@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, UseInterceptors, UploadedFiles, HttpException, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, UseInterceptors, UploadedFiles, HttpException, HttpStatus, Query } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
@@ -9,37 +9,32 @@ import { FilesInterceptor } from '@nestjs/platform-express';
 import { apiBodySchema, filesInterceptorConfig } from './helpers/file.helper';
 import { AccountActivationGuard } from 'src/auth/account-activation.guard';
 
-@UseGuards(JwtAuthGuard)
-@UseGuards(AccountActivationGuard)
 @ApiTags('Posts')
 @Controller('posts')
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
   @ApiBearerAuth()
-  @Post()
+  @UseGuards(AccountActivationGuard)
+  @UseGuards(JwtAuthGuard)
   @UseInterceptors(FilesInterceptor(...filesInterceptorConfig))
   @ApiConsumes('multipart/form-data')
   @ApiBody(apiBodySchema)
+  @Post()
   create(@UploadedFiles() images: Array<Express.Multer.File>, @Body() createPostDto: CreatePostDto) {
     return this.postsService.create(images, createPostDto);    
   }
 
   @ApiBearerAuth()
+  @UseGuards(AccountActivationGuard)
   @UseGuards(JwtAuthGuard)
-  @Get()
-  findAll() {
-    return this.postsService.findAll();
+  @Get('my')
+  findUserPosts() {
+    return this.postsService.findUserPosts();
   }
 
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.postsService.findOne(+id);
-  }
-
-  @ApiBearerAuth()
+  @UseGuards(AccountActivationGuard)
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(FilesInterceptor(...filesInterceptorConfig))
   @ApiConsumes('multipart/form-data')
@@ -50,9 +45,25 @@ export class PostsController {
   }
 
   @ApiBearerAuth()
+  @UseGuards(AccountActivationGuard)
+  @UseGuards(JwtAuthGuard)
+  @Patch('deactivate/:id')
+  deactivate(@Param('id') id: string) {
+    return this.postsService.deactivate(+id);
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(AccountActivationGuard)
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.postsService.remove(+id);
+  }
+
+
+  @Get()
+  findAll(@Query() query){
+    return this.postsService.findAll(query)
+    
   }
 }
