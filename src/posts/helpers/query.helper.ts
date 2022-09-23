@@ -35,8 +35,6 @@ export class QueryHelper{
         if (query.condition) {
             resultQuery.where = Object.assign(resultQuery.where, {condition: query.condition})
         }
-        console.log(resultQuery);
-        
         return resultQuery
     }
 }

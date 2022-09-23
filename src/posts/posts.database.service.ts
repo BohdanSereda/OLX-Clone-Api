@@ -1,11 +1,11 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { User } from "src/users/entities/user.entity";
-import { Between, MoreThan, Repository } from "typeorm";
+import { Repository } from "typeorm";
 import { CreatePostDto } from "./dto/create-post.dto";
 import { Post } from "./entities/post.entity";
 import { QueryHelper } from "./helpers/query.helper";
-import { S3Service } from "./S3.service";
+import { S3Service } from "../S3/S3.service";
 
 @Injectable()
 export class PostDataBaseService{

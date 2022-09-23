@@ -3,7 +3,6 @@ import { MulterOptions } from "@nestjs/platform-express/multer/interfaces/multer
 import { ApiBodyOptions } from "@nestjs/swagger";
 import { diskStorage } from "multer";
 import path = require('path');
-import { v4 as uuidv4 } from 'uuid';
 import { fileFilter } from "../dto/custom-types.dto";
 import * as fs from 'fs';
 import * as util from 'util';
