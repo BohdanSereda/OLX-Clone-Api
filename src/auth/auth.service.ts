@@ -18,6 +18,12 @@ export class AuthService {
     
   async login(userDto: CreateUserDto): Promise<Token>{
     const user = await this.userDataBaseService.findUserByEmail(userDto.email)
+    if (!user) {
+      throw new HttpException({
+          status: HttpStatus.UNAUTHORIZED,
+          error: 'incorrect email or password'
+      }, HttpStatus.UNAUTHORIZED)
+  }
     return this.generateToken(user)
   }
 
@@ -52,7 +58,6 @@ export class AuthService {
 
   private generateToken(user: User): Token {
     const payload = {email: user.email, id: user.id, activated: user.activated}
-
     return {token: this.jwtService.sign(payload)}
   }
 
