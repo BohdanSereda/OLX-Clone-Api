@@ -6,6 +6,7 @@ import * as bcrypt from 'bcryptjs'
 import { User } from 'src/users/entities/user.entity';
 import { MailService } from 'src/mail/mail.service';
 import { UserDataBaseService } from 'src/users/user.database.service';
+import {  ActivationMessage, Token } from './dto/custom-types.dto';
 
 @Injectable()
 export class AuthService {
@@ -15,7 +16,7 @@ export class AuthService {
               private mailService: MailService,
               private jwtService: JwtService){}
     
-  async login(userDto: CreateUserDto): Promise<{token: string}>{
+  async login(userDto: CreateUserDto): Promise<Token>{
     const user = await this.validateUser(userDto)
     return this.generateToken(user)
   }
@@ -35,7 +36,7 @@ export class AuthService {
     return user
   }
 
-  async activation(activationLink: string): Promise<string>{
+  async activation(activationLink: string): Promise<ActivationMessage>{
     const user = await this.userDataBaseService.findUserByActivationLink(activationLink)
     if(!user){
       throw new HttpException({
@@ -46,10 +47,10 @@ export class AuthService {
     
     user.activated = true
     await this.userDataBaseService.updateUser(user)
-    return "It's you! Your email address has been successfully verified."
+    return {activationMessage: "It's you! Your email address has been successfully verified."}
   }
 
-  private generateToken(user: User): {token: string} {
+  private generateToken(user: User): Token {
     const payload = {email: user.email, id: user.id, activated: user.activated}
 
     return {token: this.jwtService.sign(payload)}

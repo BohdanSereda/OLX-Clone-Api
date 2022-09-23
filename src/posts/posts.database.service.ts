@@ -25,7 +25,7 @@ export class PostDataBaseService{
         return await this.postRepository.findBy({user: userId})
     }
 
-    async updatePost(postUpdatesDto, postId, userId, images){
+    async updatePost(postUpdatesDto, postId, userId, images): Promise<false | Post>{
         const post = await this.postRepository.findOneBy({id:+postId, user: userId})
         if(!post){
             return false

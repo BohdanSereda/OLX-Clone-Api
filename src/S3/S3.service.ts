@@ -13,7 +13,7 @@ export class S3Service {
         secretAccessKey: process.env.AWS_SECRET_KEY
     })
 
-    async upload(images: Array<Express.Multer.File>, postId: number) {
+    async upload(images: Array<Express.Multer.File>, postId: number): Promise<AWS.S3.ManagedUpload.SendData[]> {
         return Promise.all(images.map(async (image) => {
             const fileStream = fs.createReadStream(image.path)
             const uploadParams = {
@@ -26,7 +26,7 @@ export class S3Service {
         }))
     }
 
-    async update(images: Array<Express.Multer.File>, postId: number, postImages: string[]) {
+    async update(images: Array<Express.Multer.File>, postId: number, postImages: string[]): Promise<AWS.S3.ManagedUpload.SendData[]> {
         const imagesNames = images.map(images => `${postId}-${images.filename}`)
         const deleteImages = postImages.filter(image => !imagesNames.includes(image))
         await Promise.all(deleteImages.map(async (image: string) => {
@@ -40,7 +40,7 @@ export class S3Service {
         return await this.upload(images, postId)
     }
 
-    async remove(images: string[]){        
+    async remove(images: string[]): Promise<void>{        
         await Promise.all(images.map(async (image: string) => {
             const uploadParams = {
                 Bucket: process.env.AWS_BUCKET_NAME,

@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger"
 import { Type } from "class-transformer"
-import { IsString, IsNotEmpty, IsIn, IsNumber, IsPhoneNumber, IsNumberString, IsPositive, Min, IsNotEmptyObject } from "class-validator"
+import { IsString, IsNotEmpty, IsIn, IsNumber, IsPhoneNumber,  Min } from "class-validator"
 import { CategoryType } from "./custom-types.dto"
 
 export class CreatePostDto {
