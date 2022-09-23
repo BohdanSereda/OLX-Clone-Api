@@ -15,12 +15,12 @@ export class AuthService {
               private mailService: MailService,
               private jwtService: JwtService){}
     
-  async login(userDto: CreateUserDto){
+  async login(userDto: CreateUserDto): Promise<{token: string}>{
     const user = await this.validateUser(userDto)
     return this.generateToken(user)
   }
 
-  async registration(userDto: CreateUserDto){
+  async registration(userDto: CreateUserDto): Promise<User>{
     const candidate = await this.userDataBaseService.findUserByEmail(userDto.email)
     if(candidate){
       throw new HttpException({
@@ -32,10 +32,10 @@ export class AuthService {
     const hashPassword = await bcrypt.hash(userDto.password, 5)
     const user = await this.userService.createUser({...userDto, password: hashPassword})
     await this.mailService.sendActivationEmail(user)
-    return this.generateToken(user)
+    return user
   }
 
-  async activation(activationLink: string){
+  async activation(activationLink: string): Promise<string>{
     const user = await this.userDataBaseService.findUserByActivationLink(activationLink)
     if(!user){
       throw new HttpException({
@@ -49,13 +49,13 @@ export class AuthService {
     return "It's you! Your email address has been successfully verified."
   }
 
-  private generateToken(user: User) {
+  private generateToken(user: User): {token: string} {
     const payload = {email: user.email, id: user.id, activated: user.activated}
 
     return {token: this.jwtService.sign(payload)}
   }
 
-  private async validateUser(userDto: CreateUserDto){
+  private async validateUser(userDto: CreateUserDto): Promise<User>{
     const user = await this.userDataBaseService.findUserByEmail(userDto.email)
     const passwordEquals = await bcrypt.compare(userDto.password, user.password)
     if(user && passwordEquals){
