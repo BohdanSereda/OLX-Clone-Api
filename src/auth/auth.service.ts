@@ -17,7 +17,7 @@ export class AuthService {
               private jwtService: JwtService){}
     
   async login(userDto: CreateUserDto): Promise<Token>{
-    const user = await this.validateUser(userDto)
+    const user = await this.userDataBaseService.findUserByEmail(userDto.email)
     return this.generateToken(user)
   }
 
@@ -54,18 +54,6 @@ export class AuthService {
     const payload = {email: user.email, id: user.id, activated: user.activated}
 
     return {token: this.jwtService.sign(payload)}
-  }
-
-  private async validateUser(userDto: CreateUserDto): Promise<User>{
-    const user = await this.userDataBaseService.findUserByEmail(userDto.email)
-    const passwordEquals = await bcrypt.compare(userDto.password, user.password)
-    if(user && passwordEquals){
-      return user
-    }
-    throw new HttpException({
-      status: HttpStatus.UNAUTHORIZED,
-      error: 'incorrect email or password'
-    }, HttpStatus.UNAUTHORIZED)
   }
 
 }

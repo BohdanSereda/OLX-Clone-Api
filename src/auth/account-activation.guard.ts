@@ -1,22 +1,38 @@
-import { CanActivate, ExecutionContext, HttpException, HttpStatus, Injectable } from "@nestjs/common";
+import { CanActivate, ExecutionContext, HttpException, HttpStatus, Inject, Injectable } from "@nestjs/common";
+import { REQUEST } from "@nestjs/core";
 import { JwtService } from "@nestjs/jwt";
 import { IGetUserAuthInfoRequest } from "src/posts/dto/custom-request.dto";
 import { User } from "src/users/entities/user.entity";
 import { UserDataBaseService } from "src/users/user.database.service";
-
+import * as bcrypt from 'bcryptjs'
 
 @Injectable()
-export class AccountActivationGuard implements CanActivate {
-    constructor(private userDataBaseService: UserDataBaseService,
+export class AccountValidationGuard implements CanActivate {
+    constructor(
+        @Inject(REQUEST) private readonly request: IGetUserAuthInfoRequest,
+        private userDataBaseService: UserDataBaseService,
         private jwtService: JwtService) { }
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
-        const request: IGetUserAuthInfoRequest = context.switchToHttp().getRequest()
         try {
-
+            const request = this.request
             let user: User
+            let passwordEquals: Boolean = true
             if (request.body.email) {
                 user = await this.userDataBaseService.findUserByEmail(request.body.email)
+                if (!user) {
+                    throw new HttpException({
+                        status: HttpStatus.UNAUTHORIZED,
+                        error: 'incorrect email or password'
+                    }, HttpStatus.UNAUTHORIZED)
+                }
+                passwordEquals = await bcrypt.compare(request.body.password, user.password)
+                if (!passwordEquals) {
+                    throw new HttpException({
+                        status: HttpStatus.UNAUTHORIZED,
+                        error: 'incorrect email or password'
+                    }, HttpStatus.UNAUTHORIZED)
+                }
             } else {
                 const authHeader = request.headers.authorization
                 const token = authHeader.split(' ')[1]
@@ -33,9 +49,9 @@ export class AccountActivationGuard implements CanActivate {
             return true
         } catch (error) {
             throw new HttpException({
-                status: HttpStatus.FORBIDDEN,
-                error: 'account is not activated'
-            }, HttpStatus.FORBIDDEN)
+                status: error.status,
+                error: error.response.error
+            }, error.status)
         }
     }
 }

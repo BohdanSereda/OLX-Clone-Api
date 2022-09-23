@@ -3,7 +3,7 @@ import { UsersService } from './users.service';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { User } from './entities/user.entity';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { AccountActivationGuard } from 'src/auth/account-activation.guard';
+import { AccountValidationGuard } from 'src/auth/account-activation.guard';
 
 
 @ApiTags('Users')
@@ -14,7 +14,7 @@ export class UsersController {
   @ApiOperation({summary: "Find all users"})
   @ApiResponse({status: 201, type: [User]})
   @ApiBearerAuth()
-  @UseGuards(AccountActivationGuard)
+  @UseGuards(AccountValidationGuard)
   @UseGuards(JwtAuthGuard)
   @Get()
   findAll() {    

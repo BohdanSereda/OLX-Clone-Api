@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
-import { AccountActivationGuard } from './account-activation.guard';
+import { AccountValidationGuard } from './account-activation.guard';
 import { AuthService } from './auth.service';
 import { User } from 'src/users/entities/user.entity';
 import { ActivationMessage, Token } from './dto/custom-types.dto';
@@ -12,7 +12,7 @@ export class AuthController {
 
   constructor(private readonly authService: AuthService) {}
 
-  @UseGuards(AccountActivationGuard)
+  @UseGuards(AccountValidationGuard)
   @ApiOperation({summary: "User login"})
   @ApiResponse({status: 201, description: "return bearer token for authentication", type: Token})
   @Post('/login')

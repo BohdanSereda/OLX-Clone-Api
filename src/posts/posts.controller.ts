@@ -7,7 +7,7 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { apiBodySchema, filesInterceptorConfig } from './helpers/file.helper';
-import { AccountActivationGuard } from 'src/auth/account-activation.guard';
+import { AccountValidationGuard } from 'src/auth/account-activation.guard';
 import { Post as PostEntity } from './entities/post.entity';
 
 @ApiTags('Posts')
@@ -16,7 +16,7 @@ export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
   @ApiBearerAuth()
-  @UseGuards(AccountActivationGuard)
+  @UseGuards(AccountValidationGuard)
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(FilesInterceptor(...filesInterceptorConfig))
   @ApiConsumes('multipart/form-data')
@@ -30,7 +30,7 @@ export class PostsController {
   }
 
   @ApiBearerAuth()
-  @UseGuards(AccountActivationGuard)
+  @UseGuards(AccountValidationGuard)
   @UseGuards(JwtAuthGuard)
   @ApiOperation({summary: "Post finding"})
   @ApiResponse({status: 201, description: "find user's posts", type: [PostEntity]})
@@ -41,7 +41,7 @@ export class PostsController {
   }
 
   @ApiBearerAuth()
-  @UseGuards(AccountActivationGuard)
+  @UseGuards(AccountValidationGuard)
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(FilesInterceptor(...filesInterceptorConfig))
   @ApiConsumes('multipart/form-data')
@@ -56,7 +56,7 @@ export class PostsController {
   }
 
   @ApiBearerAuth()
-  @UseGuards(AccountActivationGuard)
+  @UseGuards(AccountValidationGuard)
   @UseGuards(JwtAuthGuard)
   @ApiOperation({summary: "Post deactivation"})
   @ApiResponse({status: 201, description: "deactivate user's post", type: PostEntity})
@@ -68,7 +68,7 @@ export class PostsController {
   }
 
   @ApiBearerAuth()
-  @UseGuards(AccountActivationGuard)
+  @UseGuards(AccountValidationGuard)
   @UseGuards(JwtAuthGuard)
   @ApiOperation({summary: "Post delete"})
   @ApiResponse({status: 201, description: "deletes user's post", type: PostEntity})
