@@ -22,7 +22,7 @@ import { MulterModule } from '@nestjs/platform-express';
       password: process.env.MYSQL_PASSWORD,
       database: process.env.MYSQL_DB,
       entities: ["dist/**/*.entity.js"],
-      synchronize: true,
+      synchronize: false,
       autoLoadEntities: true
     }),
     MailerModule.forRoot({
