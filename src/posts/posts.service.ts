@@ -65,7 +65,7 @@ export class PostsService {
       if (!post) {
         throw new HttpException({
           status: HttpStatus.NOT_FOUND,
-          error: `post with this id: ${postId}`,
+          error: `can't get post with this id: ${postId}`,
         }, HttpStatus.NOT_FOUND)
       }
       return post
