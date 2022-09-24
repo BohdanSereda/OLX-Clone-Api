@@ -58,7 +58,7 @@ export class PostsService {
 
   }
 
-  async update(postId: number, updatePostDto: UpdatePostDto, images): Promise<Post> {
+  async update(postId: number, updatePostDto: UpdatePostDto, images: Array<Express.Multer.File>): Promise<Post> {
     try {
       const user = this.request.user
       const post = await this.postDataBaseService.updatePost(updatePostDto, postId, user.id, images)

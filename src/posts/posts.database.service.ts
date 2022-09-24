@@ -6,6 +6,7 @@ import { CreatePostDto } from "./dto/create-post.dto";
 import { Post } from "./entities/post.entity";
 import { QueryHelper } from "./helpers/query.helper";
 import { S3Service } from "../S3/S3.service";
+import { UpdatePostDto } from "./dto/update-post.dto";
 
 @Injectable()
 export class PostDataBaseService{
@@ -25,7 +26,7 @@ export class PostDataBaseService{
         return await this.postRepository.findBy({user: userId})
     }
 
-    async updatePost(postUpdatesDto, postId, userId, images): Promise<false | Post>{
+    async updatePost(postUpdatesDto: UpdatePostDto, postId: number, userId, images: Array<Express.Multer.File>): Promise<false | Post>{
         const post = await this.postRepository.findOneBy({id:+postId, user: userId})
         if(!post){
             return false
@@ -40,8 +41,8 @@ export class PostDataBaseService{
         return await this.postRepository.save(updatedPost)
     }
 
-    async deactivate(postId, userId){
-        const post = await this.postRepository.findOneBy({id:+postId, user: userId})
+    async deactivate(postId: number, userId){
+        const post = await this.postRepository.findOneBy({id: postId, user: userId})
         if(!post){
             return false
         }
