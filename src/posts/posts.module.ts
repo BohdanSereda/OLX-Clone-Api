@@ -9,13 +9,13 @@ import { Post } from './entities/post.entity';
 import { S3Module } from 'src/S3/S3.module';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Post]),
-    AuthModule, 
-    UsersModule,
-    S3Module
-  ],
-  controllers: [PostsController],
-  providers: [PostDataBaseService, PostsService]
+    imports: [
+        TypeOrmModule.forFeature([Post]),
+        AuthModule,
+        UsersModule,
+        S3Module,
+    ],
+    controllers: [PostsController],
+    providers: [PostDataBaseService, PostsService],
 })
 export class PostsModule {}
