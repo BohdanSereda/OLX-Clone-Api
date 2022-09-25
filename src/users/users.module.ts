@@ -7,12 +7,9 @@ import { AuthModule } from 'src/auth/auth.module';
 import { UserDataBaseService } from './user.database.service';
 
 @Module({
-  imports:[
-    TypeOrmModule.forFeature([User]),
-    forwardRef(()=>AuthModule)
-  ],
-  controllers: [UsersController],
-  providers: [UsersService, UserDataBaseService],
-  exports: [UsersService, UserDataBaseService]
+    imports: [TypeOrmModule.forFeature([User]), forwardRef(() => AuthModule)],
+    controllers: [UsersController],
+    providers: [UsersService, UserDataBaseService],
+    exports: [UsersService, UserDataBaseService],
 })
 export class UsersModule {}

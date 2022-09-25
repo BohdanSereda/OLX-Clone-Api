@@ -9,32 +9,35 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { MulterModule } from '@nestjs/platform-express';
 
 @Module({
-  imports: [
-    MulterModule.register(),
-    ConfigModule.forRoot({
-      envFilePath: '.env'
-    }),
-    TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: process.env.MYSQL_HOST,
-      port: +process.env.MYSQL_PORT,
-      username: process.env.MYSQL_USER,
-      password: process.env.MYSQL_PASSWORD,
-      database: process.env.MYSQL_DB,
-      entities: ["dist/**/*.entity.js"],
-      synchronize: true,
-      autoLoadEntities: true
-    }),
-    MailerModule.forRoot({
-      transport:{
-        host: process.env.MAILER_HOST,
-        auth:{
-          user: process.env.MAILER_USER,
-          pass: process.env.MAILER_PASSWORD
-        }
-      }
-    }),
-    UsersModule, 
-    AuthModule, PostsModule, MailModule]
+    imports: [
+        MulterModule.register(),
+        ConfigModule.forRoot({
+            envFilePath: '.env',
+        }),
+        TypeOrmModule.forRoot({
+            type: 'mysql',
+            host: process.env.MYSQL_HOST,
+            port: +process.env.MYSQL_PORT,
+            username: process.env.MYSQL_USER,
+            password: process.env.MYSQL_PASSWORD,
+            database: process.env.MYSQL_DB,
+            entities: ['dist/**/*.entity.js'],
+            synchronize: true,
+            autoLoadEntities: true,
+        }),
+        MailerModule.forRoot({
+            transport: {
+                host: process.env.MAILER_HOST,
+                auth: {
+                    user: process.env.MAILER_USER,
+                    pass: process.env.MAILER_PASSWORD,
+                },
+            },
+        }),
+        UsersModule,
+        AuthModule,
+        PostsModule,
+        MailModule,
+    ],
 })
 export class AppModule {}
