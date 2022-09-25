@@ -8,6 +8,7 @@ export class Token {
 }
 
 export class ActivationMessage  {
+    @IsString()
     @ApiProperty({example: "It's you! Your email address has been successfully verified.", type: String, description: 'activation message'})
     activationMessage: string
 }
