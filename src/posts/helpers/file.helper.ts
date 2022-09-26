@@ -1,9 +1,5 @@
 import {
-    ParseFilePipe,
-    FileTypeValidator,
-    MaxFileSizeValidator,
-    HttpStatus,
-    ParseFilePipeBuilder,
+    BadRequestException,
 } from '@nestjs/common';
 import { MulterOptions } from '@nestjs/platform-express/multer/interfaces/multer-options.interface';
 import { ApiBodyOptions } from '@nestjs/swagger';
