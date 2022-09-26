@@ -9,6 +9,7 @@ import {
     ValidationOptions,
     ValidationArguments,
 } from 'class-validator';
+import * as fsExtra from 'fs-extra';
 
 export function IsBiggerThan(
     property: string,
@@ -46,11 +47,13 @@ export class ParseFiles implements PipeTransform {
     ): Express.Multer.File | Express.Multer.File[] {
         files.forEach((file) => {
             if (file.size > 5242880) {
+                fsExtra.emptyDir('images');
                 throw new BadRequestException(
                     `validation failed (file: ${file.filename} is larger then 5mb)`,
                 );
             }
             if (!file.mimetype.includes('image/')) {
+                fsExtra.emptyDir('images');
                 throw new BadRequestException(
                     `validation failed (file: ${file.filename} must be image)`,
                 );
