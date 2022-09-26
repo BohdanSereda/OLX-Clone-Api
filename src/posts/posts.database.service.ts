@@ -23,7 +23,8 @@ export class PostDataBaseService {
         images: Array<Express.Multer.File>,
     ): Promise<Post | false> {
         const existingPost = await this.postRepository.findOne({
-            where: { name: createPostDto.name },
+            relations: { user: true },
+            where: { name: createPostDto.name, user: { id: user.id } },
         });
         if (existingPost) {
             return false;

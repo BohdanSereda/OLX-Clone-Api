@@ -28,11 +28,11 @@ import { FilesInterceptor } from '@nestjs/platform-express';
 import {
     apiBodySchema,
     filesInterceptorConfig,
-    parseFilePipe,
 } from './helpers/file.helper';
 import { AccountValidationGuard } from 'src/auth/account-activation.guard';
 import { Post as PostEntity } from './entities/post.entity';
 import { QueryFilterDto } from './dto/post-query.dto';
+import { ParseFiles } from './helpers/custom-validation.helper';
 
 @ApiTags('Posts')
 @Controller('posts')
@@ -54,7 +54,7 @@ export class PostsController {
     @ApiResponse({ status: 500, description: 'something went wrong' })
     @Post()
     create(
-        @UploadedFiles(parseFilePipe) images: Array<Express.Multer.File>,
+        @UploadedFiles(ParseFiles) images: Array<Express.Multer.File>,
         @Body() createPostDto: CreatePostDto,
     ): Promise<PostEntity | false> {
         return this.postsService.create(images, createPostDto);
@@ -91,7 +91,7 @@ export class PostsController {
     @ApiResponse({ status: 404, description: 'not found' })
     @Patch(':id')
     update(
-        @UploadedFiles(parseFilePipe) images: Array<Express.Multer.File>,
+        @UploadedFiles(ParseFiles) images: Array<Express.Multer.File>,
         @Param('id') id: string,
         @Body() updatePostDto: UpdatePostDto,
     ): Promise<PostEntity> {
