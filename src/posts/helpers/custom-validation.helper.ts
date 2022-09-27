@@ -28,11 +28,14 @@ export function IsBiggerThan(
                     const relatedValue = (args.object as any)[
                         relatedPropertyName
                     ];
-                    return (
-                        typeof value === 'number' &&
-                        typeof relatedValue === 'number' &&
-                        value > relatedValue
-                    );
+                    if (relatedValue) {
+                        return (
+                            typeof value === 'number' &&
+                            typeof relatedValue === 'number' &&
+                            value > relatedValue
+                        );
+                    }
+                    return true
                 },
             },
         });

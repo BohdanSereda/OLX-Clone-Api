@@ -1,7 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsNumber, IsOptional, Min } from 'class-validator';
+import { IsIn, IsNotEmpty, IsNumber, IsOptional, IsString, Min } from 'class-validator';
 import { IsBiggerThan } from '../helpers/custom-validation.helper';
+import { CategoryType } from './custom-types.dto';
 
 export class QueryFilterDto {
     @Type(() => Number)
@@ -65,4 +66,13 @@ export class QueryFilterDto {
         description: "good's condition",
     })
     readonly condition?: String;
+
+    @IsIn(['pets', 'cars', 'electronics', 'realty', 'clothing', 'other'])
+    @ApiProperty({
+        type: 'CategoryType',
+        example: 'cars',
+        required: false,
+        description: "good's category",
+    })
+    category: CategoryType;
 }

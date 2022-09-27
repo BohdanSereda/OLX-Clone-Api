@@ -47,6 +47,12 @@ export class QueryHelper {
                 condition: query.condition,
             });
         }
+
+        if(query.category) {
+            resultQuery.where = Object.assign(resultQuery.where, {
+                category: query.category,
+            });
+        }
         return resultQuery;
     }
 }
