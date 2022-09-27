@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsIn, IsNotEmpty, IsNumber, IsOptional, IsString, Min } from 'class-validator';
+import { IsIn, IsNumber,  Min } from 'class-validator';
 import { IsBiggerThan } from '../helpers/custom-validation.helper';
 import { CategoryType } from './custom-types.dto';
 
@@ -8,7 +8,6 @@ export class QueryFilterDto {
     @Type(() => Number)
     @IsNumber()
     @Min(0)
-    @IsOptional()
     @ApiProperty({
         type: 'number',
         example: 0,
@@ -23,7 +22,7 @@ export class QueryFilterDto {
     @IsBiggerThan('minPrice', {
         message: 'maxPrice must be larger than minPrice',
     })
-    @IsOptional()
+
     @ApiProperty({
         type: 'number',
         example: 200,
@@ -32,7 +31,6 @@ export class QueryFilterDto {
     })
     readonly maxPrice?: Number;
 
-    @IsOptional()
     @ApiProperty({
         type: 'string',
         example: 'Google',
@@ -41,7 +39,6 @@ export class QueryFilterDto {
     })
     readonly name?: String;
 
-    @IsOptional()
     @ApiProperty({
         type: 'string',
         example: 'Get a new',
@@ -50,7 +47,6 @@ export class QueryFilterDto {
     })
     readonly description?: String;
 
-    @IsOptional()
     @ApiProperty({
         type: 'string',
         example: 'Lviv',
