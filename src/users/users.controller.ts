@@ -7,8 +7,8 @@ import {
     ApiTags,
 } from '@nestjs/swagger';
 import { User } from './entities/user.entity';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { AccountValidationGuard } from 'src/auth/account-activation.guard';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { AccountValidationGuard } from '../auth/account-activation.guard';
 
 @ApiTags('Users')
 @Controller('users')
