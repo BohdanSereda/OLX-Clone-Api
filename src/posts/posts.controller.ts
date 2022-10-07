@@ -22,14 +22,14 @@ import {
     ApiResponse,
     ApiTags,
 } from '@nestjs/swagger';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 import { FilesInterceptor } from '@nestjs/platform-express';
 import {
     apiBodySchema,
     filesInterceptorConfig,
 } from './helpers/file.helper';
-import { AccountValidationGuard } from 'src/auth/account-activation.guard';
+import { AccountValidationGuard } from '../auth/account-activation.guard';
 import { Post as PostEntity } from './entities/post.entity';
 import { QueryFilterDto } from './dto/post-query.dto';
 import { ParseFiles } from './helpers/custom-validation.helper';

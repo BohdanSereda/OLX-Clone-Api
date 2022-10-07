@@ -8,9 +8,9 @@ import {
 } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
-import { IGetUserAuthInfoRequest } from 'src/posts/dto/custom-request.dto';
-import { User } from 'src/users/entities/user.entity';
-import { UserDataBaseService } from 'src/users/user.database.service';
+import { IGetUserAuthInfoRequest } from '../posts/dto/custom-request.dto';
+import { User } from '../users/entities/user.entity';
+import { UserDataBaseService } from '../users/user.database.service';
 import * as bcrypt from 'bcryptjs';
 
 @Injectable()
