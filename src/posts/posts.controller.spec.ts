@@ -20,30 +20,30 @@ describe('PostsController', () => {
     };
     const mockImages: Array<Express.Multer.File> = [
         {
-          fieldname: 'images',
-          originalname: 'test1.jpg',
-          encoding: '7bit',
-          mimetype: 'image/jpeg',
-          destination: './images',
-          filename: 'test1.jpg',
-          path: 'images\\test1.jpg',
-          size: 32919,
-          stream: Readable(),
-          buffer: new Buffer('test')
+            fieldname: 'images',
+            originalname: 'test1.jpg',
+            encoding: '7bit',
+            mimetype: 'image/jpeg',
+            destination: './images',
+            filename: 'test1.jpg',
+            path: 'images\\test1.jpg',
+            size: 32919,
+            stream: Readable(),
+            buffer: new Buffer('test'),
         },
         {
-          fieldname: 'images',
-          originalname: 'kuga.png',
-          encoding: '7bit',
-          mimetype: 'image/png',
-          destination: './images',
-          filename: 'kuga.png',
-          path: 'images\\kuga.png',
-          size: 211910,
-          stream: Readable(),
-          buffer: new Buffer('test')
-        }
-      ]
+            fieldname: 'images',
+            originalname: 'kuga.png',
+            encoding: '7bit',
+            mimetype: 'image/png',
+            destination: './images',
+            filename: 'kuga.png',
+            path: 'images\\kuga.png',
+            size: 211910,
+            stream: Readable(),
+            buffer: new Buffer('test'),
+        },
+    ];
     const mockPost = {
         id: 1,
         ...mockPostDto,
@@ -59,10 +59,9 @@ describe('PostsController', () => {
                 '$2a$05$B80YxET8/6tiYngjDf9ps.sgyF/SrD/fIYANAROt5fPE64gg2ASBu',
             activated: true,
             activationLink: 'ee4e1fa3-f822-4fac-83f8-037479a0284f',
-           
         },
     };
-    const mockDeactivatedPost = { ...mockPost, activated: false,}
+    const mockDeactivatedPost = { ...mockPost, activated: false };
     const mockPosts = Promise.resolve([mockPost]);
     const mockQuery = '' as unknown as QueryFilterDto;
 
@@ -70,10 +69,10 @@ describe('PostsController', () => {
         findAll: jest.fn(() => mockPosts),
         create: jest.fn(() => Promise.resolve(mockPost)),
         findUserPosts: jest.fn(() => mockPosts),
-        update: jest.fn((updates)=>{
-            return Object.assign(mockPosts, updates)
+        update: jest.fn((updates) => {
+            return Object.assign(mockPosts, updates);
         }),
-        deactivate: jest.fn(()=>mockDeactivatedPost),
+        deactivate: jest.fn(() => mockDeactivatedPost),
         remove: jest.fn(() => mockPost),
     };
     let postsController: PostsController;
@@ -104,23 +103,31 @@ describe('PostsController', () => {
         );
     });
 
-    it('should create user\'s  new post', async () => {
-        expect(await postsController.create(mockImages, mockPostDto)).toEqual(await Promise.resolve(mockPost));
+    it("should create user's  new post", async () => {
+        expect(await postsController.create(mockImages, mockPostDto)).toEqual(
+            await Promise.resolve(mockPost),
+        );
     });
 
-    it('should return user\'s posts', async () => {
+    it("should return user's posts", async () => {
         expect(await postsController.findUserPosts()).toEqual(await mockPosts);
     });
 
-    it('should update user\'s post', async () => {
-        expect(await postsController.update(mockImages, '1', mockPostDto)).toEqual(await mockPosts);
+    it("should update user's post", async () => {
+        expect(
+            await postsController.update(mockImages, '1', mockPostDto),
+        ).toEqual(await mockPosts);
     });
 
-    it('should deactivate user\'s post', async () => {
-        expect(await postsController.deactivate('1')).toEqual(await Promise.resolve(mockDeactivatedPost));
+    it("should deactivate user's post", async () => {
+        expect(await postsController.deactivate('1')).toEqual(
+            await Promise.resolve(mockDeactivatedPost),
+        );
     });
 
-    it('should remove user\'s post', async () => {
-        expect(await postsController.remove('1')).toEqual(await Promise.resolve(mockPost));
+    it("should remove user's post", async () => {
+        expect(await postsController.remove('1')).toEqual(
+            await Promise.resolve(mockPost),
+        );
     });
 });
