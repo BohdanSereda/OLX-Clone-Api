@@ -1,10 +1,6 @@
-import {
-    BadRequestException,
-} from '@nestjs/common';
 import { MulterOptions } from '@nestjs/platform-express/multer/interfaces/multer-options.interface';
 import { ApiBodyOptions } from '@nestjs/swagger';
 import { diskStorage } from 'multer';
-import path = require('path');
 import * as fs from 'fs';
 import * as util from 'util';
 
