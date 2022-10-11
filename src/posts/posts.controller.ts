@@ -37,7 +37,7 @@ import { ParseFiles } from './helpers/custom-validation.helper';
 @ApiTags('Posts')
 @Controller('posts')
 export class PostsController {
-    constructor(private readonly postsService: PostsService) {}
+    constructor(private readonly postsService: PostsService) { }
 
     @ApiBearerAuth()
     @UseGuards(AccountValidationGuard)
