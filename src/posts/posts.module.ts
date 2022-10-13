@@ -18,4 +18,4 @@ import { S3Module } from 'src/S3/S3.module';
     controllers: [PostsController],
     providers: [PostDataBaseService, PostsService],
 })
-export class PostsModule {}
+export class PostsModule { }

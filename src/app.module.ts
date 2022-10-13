@@ -40,4 +40,4 @@ import { MulterModule } from '@nestjs/platform-express';
         MailModule,
     ],
 })
-export class AppModule {}
+export class AppModule { }

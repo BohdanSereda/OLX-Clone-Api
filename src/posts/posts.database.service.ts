@@ -15,7 +15,7 @@ export class PostDataBaseService {
         @InjectRepository(Post)
         private readonly postRepository: Repository<Post>,
         private readonly s3Service: S3Service,
-    ) {}
+    ) { }
 
     async createPost(
         createPostDto: CreatePostDto,
