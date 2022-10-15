@@ -19,7 +19,7 @@ export class AccountValidationGuard implements CanActivate {
         @Inject(REQUEST) private readonly request: IGetUserAuthInfoRequest,
         private userDataBaseService: UserDataBaseService,
         private jwtService: JwtService,
-    ) {}
+    ) { }
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
         try {
